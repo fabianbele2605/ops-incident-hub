@@ -100,8 +100,10 @@ La aplicación estará disponible en:
 
 - [Arquitectura v1](./docs/fase0-arquitectura-v1.md)
 - [ADRs](./docs/adr/) *(próximamente)*
-🛠️ Comandos Útiles
-Backend
+
+## 🛠️ Comandos Útiles
+
+### Backend
 ```bash
 # Ejecutar tests
 make test
@@ -163,8 +165,10 @@ terraform apply
 # Destruir recursos
 terraform destroy
 ```
-🧪 Testing
-Backend
+
+## 🧪 Testing
+
+### Backend
 ```bash
 # Tests unitarios
 go test ./internal/...
@@ -188,7 +192,9 @@ npm test -- --coverage
 # Tests en modo watch
 npm test -- --watch
 ```
-🚢 Deployment
+
+## 🚢 Deployment
+
 ### Entornos
 
 - **dev:** Desarrollo y pruebas rápidas
@@ -206,7 +212,8 @@ El proyecto usa GitHub Actions para CI/CD:
 
 📚 [Guía de Deployment](./docs/deployment.md) *(próximamente)*
 
-📊 Estado del Proyecto
+## 📊 Estado del Proyecto
+
 ### Fases Completadas
 
 - ✅ **Fase 0:** Definición y Diseño
@@ -224,8 +231,10 @@ El proyecto usa GitHub Actions para CI/CD:
 - [ ] Fase 8: Resiliencia y Continuidad
 - [ ] Fase 9: Gobierno y Costos
 - [ ] Fase 10: Cierre Profesional
-🤝 Contribuir
-¡Las contribuciones son bienvenidas! Por favor lee la Guía de Contribución antes de enviar un PR.
+
+## 🤝 Contribuir
+
+¡Las contribuciones son bienvenidas! Por favor lee la [Guía de Contribución](./CONTRIBUTING.md) antes de enviar un PR.
 
 ### Proceso
 
@@ -234,8 +243,10 @@ El proyecto usa GitHub Actions para CI/CD:
 3. Commit tus cambios (`git commit -m 'feat: add amazing feature'`)
 4. Push a la rama (`git push origin feature/amazing-feature`)
 5. Abre un Pull Request
-📝 Licencia
-Este proyecto está bajo la Licencia MIT. Ver LICENSE para más detalles.
+
+## 📝 Licencia
+
+Este proyecto está bajo la Licencia MIT. Ver [LICENSE](./LICENSE) para más detalles.
 
 ## 👥 Autores
 
@@ -251,4 +262,8 @@ Este proyecto está bajo la Licencia MIT. Ver LICENSE para más detalles.
 
 - GitHub: [@fabianbele2605](https://github.com/fabianbele2605)
 - LinkedIn: [Tu Perfil](https://www.linkedin.com/in/fabian-enrique-bele%C3%B1o-robles-696960261/)
-- Email: fabianrobles321@outlook.com -- fabianbele19@gmail.com
+- Email: fabianrobles321@outlook.com | fabianbele19@gmail.com
+
+---
+
+**Nota:** Este es un proyecto de portafolio que demuestra capacidades de nivel senior en arquitectura cloud, DevOps y desarrollo full-stack.
