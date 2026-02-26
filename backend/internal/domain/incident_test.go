@@ -102,10 +102,10 @@ func TestIncident_Assign(t *testing.T) {
 			domain.SeverityHigh,
 			createdBy,
 		)
-		incident.Assign(assignedTo)
-		incident.StartProgress()
-		incident.Resolve()
-		incident.Close()
+		_ = incident.Assign(assignedTo)
+		_ = incident.StartProgress()
+		_ = incident.Resolve()
+		_ = incident.Close()
 
 		err := incident.Assign(uuid.New())
 
@@ -125,7 +125,7 @@ func TestIncident_StartProgress(t *testing.T) {
 			domain.SeverityHigh,
 			createdBy,
 		)
-		incident.Assign(assignedTo)
+		_ = incident.Assign(assignedTo)
 
 		err := incident.StartProgress()
 
@@ -154,10 +154,10 @@ func TestIncident_StartProgress(t *testing.T) {
 			domain.SeverityHigh,
 			createdBy,
 		)
-		incident.Assign(assignedTo)
-		incident.StartProgress()
-		incident.Resolve()
-		incident.Close()
+		_ = incident.Assign(assignedTo)
+		_ = incident.StartProgress()
+		_ = incident.Resolve()
+		_ = incident.Close()
 
 		err := incident.StartProgress()
 
@@ -177,8 +177,8 @@ func TestIncident_Resolve(t *testing.T) {
 			domain.SeverityHigh,
 			createdBy,
 		)
-		incident.Assign(assignedTo)
-		incident.StartProgress()
+		_ = incident.Assign(assignedTo)
+		_ = incident.StartProgress()
 
 		err := incident.Resolve()
 
@@ -194,10 +194,10 @@ func TestIncident_Resolve(t *testing.T) {
 			domain.SeverityHigh,
 			createdBy,
 		)
-		incident.Assign(assignedTo)
-		incident.StartProgress()
-		incident.Resolve()
-		incident.Close()
+		_ = incident.Assign(assignedTo)
+		_ = incident.StartProgress()
+		_ = incident.Resolve()
+		_ = incident.Close()
 
 		err := incident.Resolve()
 
@@ -217,9 +217,9 @@ func TestIncident_Close(t *testing.T) {
 			domain.SeverityHigh,
 			createdBy,
 		)
-		incident.Assign(assignedTo)
-		incident.StartProgress()
-		incident.Resolve()
+		_ = incident.Assign(assignedTo)
+		_ = incident.StartProgress()
+		_ = incident.Resolve()
 
 		err := incident.Close()
 
@@ -264,7 +264,7 @@ func TestIncident_IsOpen(t *testing.T) {
 			domain.SeverityHigh,
 			createdBy,
 		)
-		incident.Assign(assignedTo)
+		_ = incident.Assign(assignedTo)
 
 		assert.True(t, incident.IsOpen())
 	})
@@ -276,8 +276,8 @@ func TestIncident_IsOpen(t *testing.T) {
 			domain.SeverityHigh,
 			createdBy,
 		)
-		incident.Assign(assignedTo)
-		incident.StartProgress()
+		_ = incident.Assign(assignedTo)
+		_ = incident.StartProgress()
 
 		assert.True(t, incident.IsOpen())
 	})
@@ -289,9 +289,9 @@ func TestIncident_IsOpen(t *testing.T) {
 			domain.SeverityHigh,
 			createdBy,
 		)
-		incident.Assign(assignedTo)
-		incident.StartProgress()
-		incident.Resolve()
+		_ = incident.Assign(assignedTo)
+		_ = incident.StartProgress()
+		_ = incident.Resolve()
 
 		assert.False(t, incident.IsOpen())
 	})
@@ -303,10 +303,10 @@ func TestIncident_IsOpen(t *testing.T) {
 			domain.SeverityHigh,
 			createdBy,
 		)
-		incident.Assign(assignedTo)
-		incident.StartProgress()
-		incident.Resolve()
-		incident.Close()
+		_ = incident.Assign(assignedTo)
+		_ = incident.StartProgress()
+		_ = incident.Resolve()
+		_ = incident.Close()
 
 		assert.False(t, incident.IsOpen())
 	})
