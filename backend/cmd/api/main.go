@@ -17,6 +17,12 @@ import (
 )
 
 func main() {
+
+	// Verificar si es comando health
+	if len(os.Args) > 1 && os.Args[1] == "health" {
+		runHealthCheck()
+		return
+	}
 	// Cargar configuración
 	cfg, err := config.Load()
 	if err != nil {
@@ -58,6 +64,10 @@ func main() {
 	listIncidentsUC := incident.NewListIncidentUseCase(incidentRepo)
 
 	// Inicializar handlers
+	healthHandler := handler.NewHealthHandler(db)
+
+
+	// Inicializar handlers
 	incidentHandler := handler.NewIncidentHandler(
 		createIncidentUC,
 		assignIncidentUC,
@@ -65,7 +75,7 @@ func main() {
 	)
 
 	// Configurar router
-	router := api.SetupRouter(incidentHandler)
+	router := api.SetupRouter(incidentHandler, healthHandler)
 
 	// Configurar servidor HTTP
 	server := &http.Server{
@@ -110,4 +120,24 @@ func main() {
 
 		log.Println("Server stopped gracefully")
 	}
+}
+
+
+func runHealthCheck() {
+	cfg, err := config.Load()
+	if err != nil {
+		log.Fatalf("Failed to load config: %v", err)
+	}
+
+	url := fmt.Sprintf("http://%s:%s/health/live", cfg.Server.Host, cfg.Server.Port)
+	resp, err := http.Get(url)
+	if err != nil {
+		os.Exit(1)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		os.Exit(1)
+	}
+	os.Exit(0)
 }
