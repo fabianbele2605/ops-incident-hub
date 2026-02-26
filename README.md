@@ -1,6 +1,6 @@
 # Ops Incident Hub
 
-[![CI/CD](https://github.com/[tu-usuario]/azureSenior/workflows/CI/badge.svg)](https://github.com/[tu-usuario]/azureSenior/actions)
+[![CI/CD](https://github.com/fabianbele2605/ops-incident-hub/workflows/CI/badge.svg)](https://github.com/fabianbele2605/ops-incident-hub/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Go Version](https://img.shields.io/badge/Go-1.21+-00ADD8?logo=go)](https://golang.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6?logo=typescript)](https://www.typescriptlang.org/)
@@ -23,8 +23,11 @@ Ops Incident Hub es una plataforma moderna para gestionar el ciclo de vida compl
 
 ## 🏗️ Arquitectura
 
-Frontend (React + TS) → Backend API (Go) → PostgreSQL ↓ Azure Monitor + App Insights
-
+```
+Frontend (React + TS) → Backend API (Go) → PostgreSQL
+                              ↓
+                    Azure Monitor + App Insights
+```
 
 **Stack Tecnológico:**
 - **Backend:** Go 1.21+ con Clean Architecture
@@ -50,8 +53,8 @@ Frontend (React + TS) → Backend API (Go) → PostgreSQL ↓ Azure Monitor + Ap
 
 ```bash
 # 1. Clonar repositorio
-git clone https://github.com/[tu-usuario]/azureSenior.git
-cd azureSenior
+git clone https://github.com/fabianbele2605/ops-incident-hub.git
+cd ops-incident-hub
 
 # 2. Configurar variables de entorno
 cp backend/.env.example backend/.env
@@ -71,26 +74,35 @@ make run
 cd frontend
 npm install
 npm start
-La aplicación estará disponible en:
+```
 
-Frontend: http://localhost:3000
-Backend API: http://localhost:8080
-API Docs: http://localhost:8080/swagger
-📖 Documentación
-Para Desarrolladores
-Guía de Contribución
-Estructura del Proyecto
-Git Workflow
-Decisiones Técnicas
-Para Operadores
-Deployment Guide (próximamente)
-Runbooks (próximamente)
-Monitoreo y Alertas (próximamente)
-Arquitectura
-Arquitectura v1
-ADRs (próximamente)
+La aplicación estará disponible en:
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:8080
+- API Docs: http://localhost:8080/swagger
+
+## 📖 Documentación
+
+### Para Desarrolladores
+
+- [Guía de Contribución](./CONTRIBUTING.md)
+- [Estructura del Proyecto](./docs/fase1-estructura-repositorio.md)
+- [Git Workflow](./docs/fase1-git-workflow.md)
+- [Decisiones Técnicas](./docs/fase0-decisiones-tecnicas.md)
+
+### Para Operadores
+
+- [Deployment Guide](./docs/deployment.md) *(próximamente)*
+- [Runbooks](./docs/runbooks/) *(próximamente)*
+- [Monitoreo y Alertas](./docs/monitoring.md) *(próximamente)*
+
+### Arquitectura
+
+- [Arquitectura v1](./docs/fase0-arquitectura-v1.md)
+- [ADRs](./docs/adr/) *(próximamente)*
 🛠️ Comandos Útiles
 Backend
+```bash
 # Ejecutar tests
 make test
 
@@ -111,7 +123,11 @@ make migrate-down
 
 # Generar mocks
 make mocks
-Frontend
+```
+
+### Frontend
+
+```bash
 # Instalar dependencias
 npm install
 
@@ -129,7 +145,11 @@ npm run lint
 
 # Formatear código
 npm run format
-Infraestructura
+```
+
+### Infraestructura
+
+```bash
 # Inicializar Terraform
 cd infrastructure/terraform/environments/dev
 terraform init
@@ -142,8 +162,10 @@ terraform apply
 
 # Destruir recursos
 terraform destroy
+```
 🧪 Testing
 Backend
+```bash
 # Tests unitarios
 go test ./internal/...
 
@@ -152,7 +174,11 @@ go test ./tests/integration/...
 
 # Cobertura
 go test -cover ./...
-Frontend
+```
+
+### Frontend
+
+```bash
 # Tests unitarios
 npm test
 
@@ -161,54 +187,68 @@ npm test -- --coverage
 
 # Tests en modo watch
 npm test -- --watch
+```
 🚢 Deployment
-Entornos
-dev: Desarrollo y pruebas rápidas
-staging: Pre-producción, réplica de prod
-prod: Producción
-CI/CD
+### Entornos
+
+- **dev:** Desarrollo y pruebas rápidas
+- **staging:** Pre-producción, réplica de prod
+- **prod:** Producción
+
+### CI/CD
+
 El proyecto usa GitHub Actions para CI/CD:
 
-PR a develop: Ejecuta tests, linting, security scan
-Merge a develop: Deploy automático a staging
-PR a main: Revisión exhaustiva
-Merge a main: Deploy automático a producción
-📚 Guía de Deployment (próximamente)
+1. **PR a develop:** Ejecuta tests, linting, security scan
+2. **Merge a develop:** Deploy automático a staging
+3. **PR a main:** Revisión exhaustiva
+4. **Merge a main:** Deploy automático a producción
+
+📚 [Guía de Deployment](./docs/deployment.md) *(próximamente)*
 
 📊 Estado del Proyecto
-Fases Completadas
-✅ Fase 0: Definición y Diseño
-✅ Fase 1: Fundación del Repositorio
-🔄 Fase 2: Arquitectura de Aplicación (en progreso)
-Roadmap
-[ ] Fase 2: Arquitectura de Aplicación
-[ ] Fase 3: Infraestructura como Código
-[ ] Fase 4: Contenedores y Plataforma
-[ ] Fase 5: CI/CD Profesional
-[ ] Fase 6: Observabilidad y Operación
-[ ] Fase 7: Seguridad Integral
-[ ] Fase 8: Resiliencia y Continuidad
-[ ] Fase 9: Gobierno y Costos
-[ ] Fase 10: Cierre Profesional
+### Fases Completadas
+
+- ✅ **Fase 0:** Definición y Diseño
+- ✅ **Fase 1:** Fundación del Repositorio
+- 🔄 **Fase 2:** Arquitectura de Aplicación (en progreso)
+
+### Roadmap
+
+- [ ] Fase 2: Arquitectura de Aplicación
+- [ ] Fase 3: Infraestructura como Código
+- [ ] Fase 4: Contenedores y Plataforma
+- [ ] Fase 5: CI/CD Profesional
+- [ ] Fase 6: Observabilidad y Operación
+- [ ] Fase 7: Seguridad Integral
+- [ ] Fase 8: Resiliencia y Continuidad
+- [ ] Fase 9: Gobierno y Costos
+- [ ] Fase 10: Cierre Profesional
 🤝 Contribuir
 ¡Las contribuciones son bienvenidas! Por favor lee la Guía de Contribución antes de enviar un PR.
 
-Proceso
-Fork el proyecto
-Crea tu rama de feature (git checkout -b feature/amazing-feature)
-Commit tus cambios (git commit -m 'feat: add amazing feature')
-Push a la rama (git push origin feature/amazing-feature)
-Abre un Pull Request
+### Proceso
+
+1. Fork el proyecto
+2. Crea tu rama de feature (`git checkout -b feature/amazing-feature`)
+3. Commit tus cambios (`git commit -m 'feat: add amazing feature'`)
+4. Push a la rama (`git push origin feature/amazing-feature`)
+5. Abre un Pull Request
 📝 Licencia
 Este proyecto está bajo la Licencia MIT. Ver LICENSE para más detalles.
 
-👥 Autores
-[Tu Nombre] - Trabajo Inicial - @tu-usuario
-🙏 Agradecimientos
-Proyecto desarrollado como parte de un portafolio profesional senior
-Inspirado en mejores prácticas de la industria
-Construido con estándares de producción
-📞 Contacto
-GitHub: @tu-usuario
-LinkedIn: Tu Perfil
-Email: tu-email@example.com
+## 👥 Autores
+
+- **Fabian Bele** - *Trabajo Inicial* - [@fabianbele2605](https://github.com/fabianbele2605)
+
+## 🙏 Agradecimientos
+
+- Proyecto desarrollado como parte de un portafolio profesional senior
+- Inspirado en mejores prácticas de la industria
+- Construido con estándares de producción
+
+## 📞 Contacto
+
+- GitHub: [@fabianbele2605](https://github.com/fabianbele2605)
+- LinkedIn: [Tu Perfil](https://www.linkedin.com/in/fabian-enrique-bele%C3%B1o-robles-696960261/)
+- Email: fabianrobles321@outlook.com -- fabianbele19@gmail.com
