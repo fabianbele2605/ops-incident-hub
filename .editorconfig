@@ -1,0 +1,55 @@
+# EditorConfig: https://EditorConfig.org
+
+# Configuración raíz
+root = true
+
+# Configuración para todos los archivos
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+
+# Go files
+[*.go]
+indent_style = tab
+indent_size = 4
+
+# Makefiles
+[Makefile]
+indent_style = tab
+
+# Markdown
+[*.md]
+trim_trailing_whitespace = false
+indent_size = 2
+
+# YAML
+[*.{yml,yaml}]
+indent_size = 2
+
+# JSON
+[*.json]
+indent_size = 2
+
+# TypeScript/JavaScript
+[*.{ts,tsx,js,jsx}]
+indent_size = 2
+
+# Shell scripts
+[*.sh]
+indent_size = 2
+
+# SQL
+[*.sql]
+indent_size = 2
+
+# Terraform
+[*.tf]
+indent_size = 2
+
+# Python (si se usa en scripts)
+[*.py]
+indent_size = 4

@@ -1,0 +1,162 @@
+# ============================================
+# Sistema Operativo
+# ============================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*~
+
+# ============================================
+# IDEs y Editores
+# ============================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+.project
+.classpath
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# ============================================
+# Backend (Go)
+# ============================================
+# Binarios
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+backend/bin/
+backend/dist/
+
+# Test coverage
+*.out
+coverage.txt
+coverage.html
+
+# Go workspace
+go.work
+go.work.sum
+
+# Vendor (si usas vendoring)
+backend/vendor/
+
+# Archivos de configuración local
+backend/.env
+backend/.env.local
+backend/config.local.yaml
+
+# ============================================
+# Frontend (Node.js/React)
+# ============================================
+# Dependencies
+frontend/node_modules/
+frontend/.pnp
+frontend/.pnp.js
+
+# Testing
+frontend/coverage/
+
+# Production
+frontend/build/
+frontend/dist/
+
+# Misc
+frontend/.DS_Store
+frontend/.env
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+
+# Logs
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+
+# ============================================
+# Terraform
+# ============================================
+# Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+# Crash log files
+crash.log
+crash.*.log
+
+# Exclude all .tfvars files
+*.tfvars
+*.tfvars.json
+
+# Ignore override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Ignore CLI configuration files
+.terraformrc
+terraform.rc
+
+# Lock file (comentar si quieres versionarlo)
+# .terraform.lock.hcl
+
+# ============================================
+# Docker
+# ============================================
+*.log
+
+# ============================================
+# Secrets y Credenciales
+# ============================================
+*.pem
+*.key
+*.cert
+*.crt
+secrets/
+.secrets
+credentials.json
+service-account.json
+
+# ============================================
+# Logs
+# ============================================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# ============================================
+# Temporales
+# ============================================
+tmp/
+temp/
+*.tmp
+*.bak
+*.cache
+
+# ============================================
+# Build artifacts
+# ============================================
+dist/
+build/
+out/
+
+# ============================================
+# Backups
+# ============================================
+*.backup
+*.old
