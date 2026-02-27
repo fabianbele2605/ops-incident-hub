@@ -351,19 +351,33 @@ Presupuesto, etiquetas y revisiones de costo periodicas.
   - Pipeline con 5 jobs: lint, test, security, build, docker-build
   - Fecha de cierre: 27 de febrero de 2025
 
+- ✅ Fase 6 - Observabilidad y operacion (COMPLETADA)
+  - Documentos: fase6-observabilidad-diseno.md, fase6-resumen.md
+  - Structured logging con slog (Go standard library) ✅
+  - Request ID único por request con propagación en contexto ✅
+  - Middleware HTTP para logging automático ✅
+  - Métricas Prometheus (negocio y técnicas) ✅
+  - Endpoint /metrics para scraping ✅
+  - Middleware de métricas automático ✅
+  - Trazabilidad end-to-end con request_id ✅
+  - PRs #21-#22 mergeados exitosamente
+  - Métricas: +1,657 líneas, 2 PRs, logging + metrics completos
+  - Stack: slog, Prometheus, promhttp
+  - Fecha de cierre: 27 de febrero de 2025
+
 ### Fase actual:
-- 🔄 Fase 6 - Observabilidad y operacion (PENDIENTE)
-  - Definir estandar de logs estructurados
-  - Definir metricas de negocio y tecnicas
-  - Definir trazabilidad distribuida
-  - Definir alertas accionables con umbrales claros
+- 🔄 Fase 7 - Seguridad integral (PENDIENTE)
+  - Definir estrategia de identidades administradas
+  - Definir gestión segura de secretos y certificados
+  - Definir hardening de plataforma y workloads
+  - Definir controles de compliance básicos
 
 ### Proxima accion inmediata:
-Iniciar Fase 6 - Observabilidad:
-- Diseñar estrategia de logging estructurado
-- Definir métricas clave de negocio y técnicas
-- Evaluar herramientas de observabilidad (Prometheus, Grafana, etc.)
-- Planificar implementación de trazabilidad
+Iniciar Fase 7 - Seguridad Integral:
+- Diseñar estrategia de gestión de secretos
+- Evaluar herramientas (HashiCorp Vault, Azure Key Vault)
+- Planificar hardening de contenedores
+- Definir controles de seguridad
 
 ## 13. Decisiones iniciales de stack (acordadas)
 - Backend principal: Go.
