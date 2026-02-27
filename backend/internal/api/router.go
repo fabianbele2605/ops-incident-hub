@@ -4,6 +4,7 @@ import (
 	"log/slog"
 
 	"github.com/fabianbele2605/ops-incident-hub/backend/internal/api/handler"
+	"github.com/fabianbele2605/ops-incident-hub/backend/internal/api/middleware"
 	"github.com/fabianbele2605/ops-incident-hub/backend/internal/observability/logger"
 	"github.com/fabianbele2605/ops-incident-hub/backend/internal/observability/metrics"
 	"github.com/gorilla/mux"
@@ -11,10 +12,12 @@ import (
 )
 
 // SetupRouter configura las rutas de la API
-func SetupRouter(incidentHandler *handler.IncidentHandler, healthHandler *handler.HealthHandler, appLogger *slog.Logger) *mux.Router {
+func SetupRouter(incidentHandler *handler.IncidentHandler, healthHandler *handler.HealthHandler, appLogger *slog.Logger, allowedOrigins []string) *mux.Router {
 	router := mux.NewRouter()
 
-	// Middleware global
+	// Middleware global (orden importa)
+	router.Use(middleware.SecurityHeadersMiddleware)
+	router.Use(middleware.CORSMiddleware(allowedOrigins))
 	router.Use(metrics.MetricsMiddleware)
 	router.Use(logger.LoggingMiddleware(appLogger))
 

@@ -85,7 +85,7 @@ func main() {
 	)
 
 	// Configurar router
-	router := api.SetupRouter(incidentHandler, healthHandler, appLogger)
+	router := api.SetupRouter(incidentHandler, healthHandler, appLogger, cfg.Server.AllowedOrigins)
 
 	// Configurar servidor HTTP
 	server := &http.Server{
