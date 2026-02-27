@@ -1,4 +1,4 @@
-# Fase 5 - Tests Unitarios e Integración (Pasos 1-3)
+# Fase 5 - Tests Unitarios, Integración y Handlers (Pasos 1-4)
 
 ## 📋 Resumen
 
@@ -9,6 +9,7 @@ Implementación completa de tests unitarios y de integración para las capas de 
 - ✅ Tests unitarios de entidades de dominio (Incident, User)
 - ✅ Tests unitarios de casos de uso (Create, Assign, List)
 - ✅ Tests de integración de repositorios con PostgreSQL
+- ✅ Tests de handlers HTTP con mocks
 - ✅ Refactorización de mocks compartidos
 - ✅ Corrección de errores de linting en todo el proyecto
 - ✅ Integración con CI/CD (GitHub Actions)
@@ -60,6 +61,27 @@ Implementación completa de tests unitarios y de integración para las capas de 
 - Manejo de errores (not found)
 - 7 funciones de test
 
+### Tests de Handlers HTTP (Paso 4)
+
+**`backend/internal/api/handler/mock_test.go`**
+- Mocks de use cases para tests de handlers
+- Implementación de interfaces CreateIncidentExecutor, AssignIncidentExecutor, ListIncidentsExecutor
+- Funciones configurables para simular diferentes escenarios
+
+**`backend/internal/api/handler/incident_handler_test.go`**
+- Tests de endpoint Create: 3 casos (success, invalid body, validation error)
+- Tests de endpoint Assign: 3 casos (success, invalid ID, not found)
+- Tests de endpoint List: 2 casos (success, error handling)
+- Uso de httptest para simular requests/responses
+- Validación de status codes HTTP
+- Validación de JSON response
+- 3 funciones de test, 8 casos de prueba
+
+**`backend/internal/api/handler/incident_handler.go` (modificado)**
+- Refactorizado para usar interfaces en lugar de structs concretos
+- Agregadas interfaces: CreateIncidentExecutor, AssignIncidentExecutor, ListIncidentsExecutor
+- Mejora de testabilidad sin cambiar funcionalidad
+
 ## 🔧 Correcciones de Calidad
 
 ### Linting
@@ -107,6 +129,16 @@ Total: 17 casos de prueba
   - GetByEmail, Update, List, Delete
   
 Total: 13 casos de prueba
+```
+
+### Handler Layer (100%)
+```
+✅ IncidentHandler: 8 casos de prueba
+  - Create: 3 casos (success, invalid body, validation error)
+  - Assign: 3 casos (success, invalid ID, not found)
+  - List: 2 casos (success, error handling)
+  
+Total: 8 casos de prueba
 ```
 
 ## 🚀 Integración CI/CD
@@ -194,14 +226,24 @@ Según TutorIA, se siguió el flujo profesional para cada paso:
 6. ✅ CI/CD ejecutado exitosamente
 7. ✅ Merge a develop
 
+### Paso 4 (Tests de Handlers HTTP)
+1. ✅ Crear rama: `feature/handler-tests`
+2. ✅ Refactorizar handler para usar interfaces
+3. ✅ Implementar mocks de use cases
+4. ✅ Implementar tests de handlers
+5. ✅ Commit y push
+6. ✅ PR #16
+7. ✅ CI/CD ejecutado exitosamente
+8. ✅ Merge a develop
+
 ## 📈 Métricas
 
-- **Archivos de test creados:** 4 nuevos
-- **Archivos refactorizados:** 3
-- **Líneas de código de test:** +575
-- **Casos de prueba totales:** 43
+- **Archivos de test creados:** 6 nuevos
+- **Archivos refactorizados:** 4
+- **Líneas de código de test:** +887
+- **Casos de prueba totales:** 51
 - **Errores de lint corregidos:** 9
-- **PRs mergeados:** 3 (#12, #13, #14)
+- **PRs mergeados:** 4 (#12, #13, #14, #16)
 - **Tiempo promedio de CI:** ~50s
 
 ## ✅ Criterios de Validación Cumplidos
@@ -218,6 +260,12 @@ Según TutorIA, se siguió el flujo profesional para cada paso:
 - [x] Foreign key constraints validados
 - [x] Migraciones se ejecutan correctamente
 
+### Tests de Handlers
+- [x] Tests de handlers HTTP pasan
+- [x] Validación de status codes correcta
+- [x] Validación de JSON response correcta
+- [x] Manejo de errores HTTP validado
+
 ### Calidad
 - [x] Linter pasa sin errores
 - [x] CI/CD ejecuta tests automáticamente
@@ -225,13 +273,6 @@ Según TutorIA, se siguió el flujo profesional para cada paso:
 - [x] Cobertura de código > 80%
 
 ## 🎯 Próximos Pasos (Fase 5 - Continuación)
-
-### Paso 4: Tests de Handlers HTTP
-- Tests de endpoints REST
-- Validación de request/response
-- Manejo de errores HTTP
-- Tests de serialización JSON
-- Validación de status codes
 
 ### Pasos 5-10: CI/CD Avanzado
 - Configuración de security scanning (Paso 6)
@@ -253,6 +294,12 @@ Según TutorIA, se siguió el flujo profesional para cada paso:
 - Funciones configurables dan flexibilidad
 - Package `_test` mantiene encapsulación
 
+### Tests de Handlers
+- Interfaces mejoran testabilidad sin cambiar funcionalidad
+- httptest.NewRecorder y httptest.NewRequest simplifican tests HTTP
+- Mocks de use cases permiten tests aislados
+- Validación de JSON response requiere unmarshaling
+
 ### CI/CD
 - Tests de integración requieren servicios adicionales
 - Linting debe ejecutarse antes de tests
@@ -268,6 +315,6 @@ Según TutorIA, se siguió el flujo profesional para cada paso:
 ---
 
 **Fecha de implementación:** 26 de febrero de 2025  
-**PRs:** #12, #13, #14  
-**Estado:** Pasos 1-3 completados y mergeados a develop  
-**Siguiente:** Paso 4 - Tests de Handlers HTTP
+**PRs:** #12, #13, #14, #16  
+**Estado:** Pasos 1-4 completados y mergeados a develop  
+**Siguiente:** Paso 5 - CI/CD Avanzado (Security Scanning)
