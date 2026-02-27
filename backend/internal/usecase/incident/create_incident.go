@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/fabianbele2605/ops-incident-hub/backend/internal/domain"
+	"github.com/fabianbele2605/ops-incident-hub/backend/internal/observability/metrics"
 	"github.com/google/uuid"
 )
 
@@ -63,6 +64,9 @@ func (uc *CreateIncidentUseCase) Execute(ctx context.Context, input CreateIncide
 	if err := uc.incidentRepo.Create(ctx, incident); err != nil {
 		return nil, err
 	}
+
+	// Registrar métrica
+	metrics.RecordIncidentCreated(string(incident.Severity))
 
 	return incident, nil
 }
