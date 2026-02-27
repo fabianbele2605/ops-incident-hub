@@ -5,7 +5,9 @@ import (
 
 	"github.com/fabianbele2605/ops-incident-hub/backend/internal/api/handler"
 	"github.com/fabianbele2605/ops-incident-hub/backend/internal/observability/logger"
+	"github.com/fabianbele2605/ops-incident-hub/backend/internal/observability/metrics"
 	"github.com/gorilla/mux"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 // SetupRouter configura las rutas de la API
@@ -13,7 +15,11 @@ func SetupRouter(incidentHandler *handler.IncidentHandler, healthHandler *handle
 	router := mux.NewRouter()
 
 	// Middleware global
+	router.Use(metrics.MetricsMiddleware)
 	router.Use(logger.LoggingMiddleware(appLogger))
+
+	// Metrics endpoint
+	router.Handle("/metrics", promhttp.Handler()).Methods("GET")
 
 	// Health endpoints (antes de /api/v1)
 	router.HandleFunc("/health", healthHandler.Health).Methods("GET")

@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/fabianbele2605/ops-incident-hub/backend/internal/domain"
+	"github.com/fabianbele2605/ops-incident-hub/backend/internal/observability/metrics"
 	"github.com/google/uuid"
 )
 
@@ -69,5 +70,12 @@ func (uc *AssignIncidentUseCase) Execute(ctx context.Context, input AssignIncide
 	}
 
 	// Actualizar en el repositorio
-	return uc.incidentRepo.Update(ctx, incident)
+	if err := uc.incidentRepo.Update(ctx, incident); err != nil {
+		return err
+	}
+
+	// Registrar métrica
+	metrics.RecordIncidentAssigned()
+
+	return nil
 }
