@@ -1,7 +1,6 @@
 package api
 
 import (
-
 	"github.com/fabianbele2605/ops-incident-hub/backend/internal/api/handler"
 	"github.com/gorilla/mux"
 )

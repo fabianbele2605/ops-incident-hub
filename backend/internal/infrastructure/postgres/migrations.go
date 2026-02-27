@@ -66,7 +66,9 @@ func getAppliedMigrations(db *sql.DB) (map[string]bool, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
+	defer func() {
+		_ = rows.Close()
+	}()
 
 	applied := make(map[string]bool)
 	for rows.Next() {
@@ -99,7 +101,9 @@ func applyMigration(db *sql.DB, file, name string) error {
 	if err != nil {
 		return err
 	}
-	defer tx.Rollback()
+	defer func() {
+		_ = tx.Rollback() // Ignore error as commit will be called if successful
+	}()
 
 	if _, err := tx.Exec(string(content)); err != nil {
 		return err

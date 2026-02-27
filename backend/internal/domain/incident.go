@@ -10,18 +10,18 @@ import (
 type Severity string
 
 const (
-	SeverityCritical    Severity = "critical"
-	SeverityHigh        Severity = "high"
-	SeverityMedium      Severity = "medium"
-	SeverityLow         Severity = "low"
+	SeverityCritical Severity = "critical"
+	SeverityHigh     Severity = "high"
+	SeverityMedium   Severity = "medium"
+	SeverityLow      Severity = "low"
 )
 
 // Status representa el estado de un incidente
 type Status string
 
 const (
-	StatusOpen      Status = "open"
-	StatusAssigned  Status = "assigned"
+	StatusOpen       Status = "open"
+	StatusAssigned   Status = "assigned"
 	StatusInProgress Status = "in_progress"
 	StatusResolved   Status = "resolved"
 	StatusClosed     Status = "closed"
@@ -29,17 +29,17 @@ const (
 
 // Incident representa un incidente operativo
 type Incident struct {
-	ID             uuid.UUID
-	Title          string
-	Description    string
-	Severity       Severity
-	Status         Status
-	AssignedTo     *uuid.UUID
-	CreatedBy      uuid.UUID
-	CreatedAt      time.Time
-	UpdatedAt      time.Time
-	ResolvedAt     *time.Time
-	Metadata       map[string]interface{}
+	ID          uuid.UUID
+	Title       string
+	Description string
+	Severity    Severity
+	Status      Status
+	AssignedTo  *uuid.UUID
+	CreatedBy   uuid.UUID
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
+	ResolvedAt  *time.Time
+	Metadata    map[string]interface{}
 }
 
 // NewIncident crea un nuevo incidente
@@ -56,15 +56,15 @@ func NewIncident(title, description string, severity Severity, createdBy uuid.UU
 
 	now := time.Now()
 	return &Incident{
-		ID:              uuid.New(),
-		Title:           title,
-		Description:     description,
-		Severity:        severity,
-		Status:          StatusOpen,
-		CreatedBy:       createdBy,
-		CreatedAt:       now,
-		UpdatedAt:       now,
-		Metadata:        make(map[string]interface{}),
+		ID:          uuid.New(),
+		Title:       title,
+		Description: description,
+		Severity:    severity,
+		Status:      StatusOpen,
+		CreatedBy:   createdBy,
+		CreatedAt:   now,
+		UpdatedAt:   now,
+		Metadata:    make(map[string]interface{}),
 	}, nil
 }
 

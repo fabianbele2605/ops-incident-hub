@@ -19,7 +19,7 @@ func TestListIncidentsUseCase_Execute(t *testing.T) {
 		adminUser, _ := domain.NewUser("admin@test.com", "Admin", domain.RoleAdmin)
 		inc1, _ := domain.NewIncident("Inc 1", "Desc 1", domain.SeverityHigh, adminUser.ID)
 		inc2, _ := domain.NewIncident("Inc 2", "Desc 2", domain.SeverityMedium, adminUser.ID)
-		
+
 		incidentRepo := &mockIncidentRepository{
 			listFunc: func(ctx context.Context, filters domain.ListFilters) ([]*domain.Incident, error) {
 				return []*domain.Incident{inc1, inc2}, nil
@@ -28,16 +28,16 @@ func TestListIncidentsUseCase_Execute(t *testing.T) {
 				return 2, nil
 			},
 		}
-		
+
 		uc := incident.NewListIncidentUseCase(incidentRepo)
-		
+
 		input := incident.ListIncidentsInput{
 			Limit:  20,
 			Offset: 0,
 		}
-		
+
 		result, err := uc.Execute(ctx, input)
-		
+
 		require.NoError(t, err)
 		assert.NotNil(t, result)
 		assert.Len(t, result.Incidents, 2)
@@ -54,13 +54,13 @@ func TestListIncidentsUseCase_Execute(t *testing.T) {
 				return 0, nil
 			},
 		}
-		
+
 		uc := incident.NewListIncidentUseCase(incidentRepo)
-		
+
 		input := incident.ListIncidentsInput{}
-		
+
 		_, err := uc.Execute(ctx, input)
-		
+
 		require.NoError(t, err)
 	})
 
@@ -74,15 +74,15 @@ func TestListIncidentsUseCase_Execute(t *testing.T) {
 				return 0, nil
 			},
 		}
-		
+
 		uc := incident.NewListIncidentUseCase(incidentRepo)
-		
+
 		input := incident.ListIncidentsInput{
 			Limit: 200,
 		}
-		
+
 		_, err := uc.Execute(ctx, input)
-		
+
 		require.NoError(t, err)
 	})
 
@@ -90,7 +90,7 @@ func TestListIncidentsUseCase_Execute(t *testing.T) {
 		status := domain.StatusOpen
 		severity := domain.SeverityHigh
 		assignedTo := uuid.New()
-		
+
 		incidentRepo := &mockIncidentRepository{
 			listFunc: func(ctx context.Context, filters domain.ListFilters) ([]*domain.Incident, error) {
 				assert.Equal(t, &status, filters.Status)
@@ -102,9 +102,9 @@ func TestListIncidentsUseCase_Execute(t *testing.T) {
 				return 0, nil
 			},
 		}
-		
+
 		uc := incident.NewListIncidentUseCase(incidentRepo)
-		
+
 		input := incident.ListIncidentsInput{
 			Status:     &status,
 			Severity:   &severity,
@@ -112,9 +112,9 @@ func TestListIncidentsUseCase_Execute(t *testing.T) {
 			Limit:      10,
 			Offset:     0,
 		}
-		
+
 		result, err := uc.Execute(ctx, input)
-		
+
 		require.NoError(t, err)
 		assert.NotNil(t, result)
 	})
@@ -126,13 +126,13 @@ func TestListIncidentsUseCase_Execute(t *testing.T) {
 				return nil, repoErr
 			},
 		}
-		
+
 		uc := incident.NewListIncidentUseCase(incidentRepo)
-		
+
 		input := incident.ListIncidentsInput{}
-		
+
 		result, err := uc.Execute(ctx, input)
-		
+
 		assert.Error(t, err)
 		assert.Nil(t, result)
 		assert.Equal(t, repoErr, err)
@@ -148,13 +148,13 @@ func TestListIncidentsUseCase_Execute(t *testing.T) {
 				return 0, repoErr
 			},
 		}
-		
+
 		uc := incident.NewListIncidentUseCase(incidentRepo)
-		
+
 		input := incident.ListIncidentsInput{}
-		
+
 		result, err := uc.Execute(ctx, input)
-		
+
 		assert.Error(t, err)
 		assert.Nil(t, result)
 		assert.Equal(t, repoErr, err)
