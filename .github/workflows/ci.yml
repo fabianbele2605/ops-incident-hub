@@ -84,12 +84,13 @@ jobs:
         with:
           sarif_file: gosec-results.sarif
       
-      - name: Install nancy
-        run: go install github.com/sonatype-nexus-community/nancy@latest
+      - name: Install govulncheck
+        run: go install golang.org/x/vuln/cmd/govulncheck@latest
       
-      - name: Run nancy dependency scanner
+      - name: Run govulncheck vulnerability scanner
         working-directory: backend
-        run: go list -json -deps ./... | nancy sleuth
+        run: govulncheck ./...
+
       
       - name: Run gitleaks
         uses: gitleaks/gitleaks-action@v2
