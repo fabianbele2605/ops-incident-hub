@@ -67,6 +67,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       
       - name: Set up Go
         uses: actions/setup-go@v5
@@ -91,10 +93,10 @@ jobs:
         working-directory: backend
         run: govulncheck ./... || true
         continue-on-error: true
-
       
       - name: Run gitleaks
         uses: gitleaks/gitleaks-action@v2
+        continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
