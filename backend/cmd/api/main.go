@@ -14,6 +14,7 @@ import (
 	"github.com/fabianbele2605/ops-incident-hub/backend/internal/config"
 	"github.com/fabianbele2605/ops-incident-hub/backend/internal/infrastructure/postgres"
 	"github.com/fabianbele2605/ops-incident-hub/backend/internal/usecase/incident"
+	"github.com/fabianbele2605/ops-incident-hub/backend/internal/observability/logger"
 )
 
 func main() {
@@ -29,9 +30,13 @@ func main() {
 		log.Fatalf("Failed to load config: %v", err)
 	}
 
-	log.Printf("Starting Ops Incident Hub API")
-	log.Printf("Environment: %s", cfg.Server.Environment)
-	log.Printf("Server: %s:%s", cfg.Server.Host, cfg.Server.Port)
+	// Inicializar logger estructurado
+	appLogger := logger.New(cfg.Server.Environment)
+	appLogger.Info("starting ops incident hub api",
+		"environment", cfg.Server.Environment,
+		"host", cfg.Server.Host,
+		"port", cfg.Server.Port,
+	)
 
 	// Conectar a la base de datos
 	db, err := postgres.NewDatabase(postgres.DatabaseConfig{
@@ -41,22 +46,24 @@ func main() {
 		ConnMaxLifetime: cfg.Database.ConnMaxLifetime,
 	})
 	if err != nil {
+		appLogger.Error("failed to connect to database", "error", err)
 		log.Fatalf("Failed to connect to database: %v", err)
 	}
 	defer func() {
 		if err := db.Close(); err != nil {
-			log.Printf("Error closing database: %v", err)
+			appLogger.Error("error closing database", "error", err)
 		}
 	}()
 
-	log.Println("Database connected successfully")
+	appLogger.Info("database connected successfully")
 
 	// Ejecutar migraciones
 	if err := postgres.RunMigrations(db, "migrations"); err != nil {
+		appLogger.Error("failed to run migrations", "error", err)
 		log.Fatalf("Failed to run migrations: %v", err)
 	}
 
-	log.Println("Migrations applied successfully")
+	appLogger.Info("migrations applied successfully")
 
 	// Inicializar repositorios
 	incidentRepo := postgres.NewIncidentRepository(db)
@@ -78,7 +85,7 @@ func main() {
 	)
 
 	// Configurar router
-	router := api.SetupRouter(incidentHandler, healthHandler)
+	router := api.SetupRouter(incidentHandler, healthHandler, appLogger)
 
 	// Configurar servidor HTTP
 	server := &http.Server{
@@ -93,7 +100,7 @@ func main() {
 
 	// Iniciar servidor en goroutine
 	go func() {
-		log.Printf("Server listening on %s", server.Addr)
+		appLogger.Info("server listening", "addr", server.Addr)
 		serverErrors <- server.ListenAndServe()
 	}()
 
@@ -104,10 +111,11 @@ func main() {
 	// Esperar por error o señal de shutdown
 	select {
 	case err := <-serverErrors:
+		appLogger.Error("server error", "error", err)
 		log.Fatalf("Server error: %v", err)
 
 	case sig := <-shutdown:
-		log.Printf("Received signal: %v. Starting graceful shutdown...", sig)
+		appLogger.Info("received shutdown signal", "signal", sig)
 
 		// Crear contexto con timeout para shutdown
 		ctx, cancel := context.WithTimeout(context.Background(), cfg.Server.ShutdownTimeout)
@@ -115,13 +123,14 @@ func main() {
 
 		// Intentar shutdown graceful
 		if err := server.Shutdown(ctx); err != nil {
-			log.Printf("Graceful shutdown failed: %v", err)
+			appLogger.Error("graceful shutdown failed", "error", err)
 			if err := server.Close(); err != nil {
+				appLogger.Error("failed to close server", "error", err)
 				log.Fatalf("Failed to close server: %v", err)
 			}
 		}
 
-		log.Println("Server stopped gracefully")
+		appLogger.Info("server stopped gracefully")
 	}
 }
 

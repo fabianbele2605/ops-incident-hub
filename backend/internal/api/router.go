@@ -1,13 +1,19 @@
 package api
 
 import (
+	"log/slog"
+
 	"github.com/fabianbele2605/ops-incident-hub/backend/internal/api/handler"
+	"github.com/fabianbele2605/ops-incident-hub/backend/internal/observability/logger"
 	"github.com/gorilla/mux"
 )
 
 // SetupRouter configura las rutas de la API
-func SetupRouter(incidentHandler *handler.IncidentHandler, healthHandler *handler.HealthHandler) *mux.Router {
+func SetupRouter(incidentHandler *handler.IncidentHandler, healthHandler *handler.HealthHandler, appLogger *slog.Logger) *mux.Router {
 	router := mux.NewRouter()
+
+	// Middleware global
+	router.Use(logger.LoggingMiddleware(appLogger))
 
 	// Health endpoints (antes de /api/v1)
 	router.HandleFunc("/health", healthHandler.Health).Methods("GET")
