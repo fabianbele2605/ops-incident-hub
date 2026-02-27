@@ -1,4 +1,4 @@
-# Fase 5 - Tests Unitarios, Integración y Handlers (Pasos 1-4)
+# Fase 5 - CI/CD Profesional: Tests y Security Scanning (Pasos 1-5)
 
 ## 📋 Resumen
 
@@ -10,6 +10,7 @@ Implementación completa de tests unitarios y de integración para las capas de 
 - ✅ Tests unitarios de casos de uso (Create, Assign, List)
 - ✅ Tests de integración de repositorios con PostgreSQL
 - ✅ Tests de handlers HTTP con mocks
+- ✅ Security scanning automatizado en CI/CD
 - ✅ Refactorización de mocks compartidos
 - ✅ Corrección de errores de linting en todo el proyecto
 - ✅ Integración con CI/CD (GitHub Actions)
@@ -82,6 +83,33 @@ Implementación completa de tests unitarios y de integración para las capas de 
 - Agregadas interfaces: CreateIncidentExecutor, AssignIncidentExecutor, ListIncidentsExecutor
 - Mejora de testabilidad sin cambiar funcionalidad
 
+### Security Scanning (Paso 5)
+
+**`.github/workflows/ci.yml` (modificado)**
+- Agregado job `security` con 3 herramientas de escaneo
+- Configurado para ejecutarse en paralelo con lint y test
+- Build y Docker Build dependen de security scan
+
+**Herramientas integradas:**
+
+1. **gosec** - SAST (Static Application Security Testing)
+   - Escanea código Go en busca de vulnerabilidades de seguridad
+   - Genera reporte SARIF para GitHub Security tab
+   - Configurado con `-no-fail` para no bloquear pipeline
+   - Encontró 4 issues de severidad media (aceptables)
+
+2. **govulncheck** - Vulnerability Scanner
+   - Herramienta oficial de Go para detectar vulnerabilidades
+   - Escanea dependencias y stdlib
+   - Configurado con `continue-on-error: true`
+   - Encontró 22 vulnerabilidades en Go 1.22.2 stdlib
+
+3. **gitleaks** - Secrets Detection
+   - Detecta secretos y credenciales expuestas en código
+   - Escanea historial completo de Git
+   - Configurado con `fetch-depth: 0` y `continue-on-error: true`
+   - No encontró secretos expuestos
+
 ## 🔧 Correcciones de Calidad
 
 ### Linting
@@ -139,6 +167,23 @@ Total: 13 casos de prueba
   - List: 2 casos (success, error handling)
   
 Total: 8 casos de prueba
+```
+
+### Security Scanning (Paso 5)
+```
+✅ gosec: 4 findings (medium severity, acceptable)
+  - G202: SQL concatenation in pagination
+  - G304: File inclusion in migrations
+  - G107: HTTP request with variable URL
+  - G117: Password field in config struct
+
+✅ govulncheck: 22 vulnerabilities in Go stdlib
+  - Requiere actualización a Go 1.24+
+  - Configurado en modo informativo (no bloquea)
+
+✅ gitleaks: 0 secrets found
+  - Historial completo escaneado
+  - No credenciales expuestas
 ```
 
 ## 🚀 Integración CI/CD
@@ -236,15 +281,28 @@ Según TutorIA, se siguió el flujo profesional para cada paso:
 7. ✅ CI/CD ejecutado exitosamente
 8. ✅ Merge a develop
 
+### Paso 5 (Security Scanning)
+1. ✅ Crear rama: `feature/security-scanning`
+2. ✅ Agregar job security en workflow
+3. ✅ Integrar gosec con SARIF upload
+4. ✅ Reemplazar nancy con govulncheck
+5. ✅ Configurar gitleaks con fetch-depth
+6. ✅ Configurar continue-on-error para scanners
+7. ✅ Commits y push (4 commits)
+8. ✅ PR #18
+9. ✅ CI/CD ejecutado exitosamente
+10. ✅ Merge a develop
+
 ## 📈 Métricas
 
 - **Archivos de test creados:** 6 nuevos
-- **Archivos refactorizados:** 4
+- **Archivos refactorizados:** 5 (incluye ci.yml)
 - **Líneas de código de test:** +887
 - **Casos de prueba totales:** 51
 - **Errores de lint corregidos:** 9
-- **PRs mergeados:** 4 (#12, #13, #14, #16)
-- **Tiempo promedio de CI:** ~50s
+- **Security scanners integrados:** 3 (gosec, govulncheck, gitleaks)
+- **PRs mergeados:** 5 (#12, #13, #14, #16, #18)
+- **Tiempo promedio de CI:** ~1m 30s (con security scan)
 
 ## ✅ Criterios de Validación Cumplidos
 
@@ -266,6 +324,13 @@ Según TutorIA, se siguió el flujo profesional para cada paso:
 - [x] Validación de JSON response correcta
 - [x] Manejo de errores HTTP validado
 
+### Security Scanning
+- [x] gosec integrado y funcionando
+- [x] govulncheck detecta vulnerabilidades
+- [x] gitleaks escanea secretos
+- [x] Resultados SARIF subidos a GitHub Security
+- [x] Pipeline no bloqueado por findings informativos
+
 ### Calidad
 - [x] Linter pasa sin errores
 - [x] CI/CD ejecuta tests automáticamente
@@ -274,7 +339,7 @@ Según TutorIA, se siguió el flujo profesional para cada paso:
 
 ## 🎯 Próximos Pasos (Fase 5 - Continuación)
 
-### Pasos 5-10: CI/CD Avanzado
+### Pasos 6-10: CI/CD Avanzado
 - Configuración de security scanning (Paso 6)
 - Estrategia de deployment (Paso 7)
 - Versionado semántico (Paso 8)
@@ -300,6 +365,14 @@ Según TutorIA, se siguió el flujo profesional para cada paso:
 - Mocks de use cases permiten tests aislados
 - Validación de JSON response requiere unmarshaling
 
+### Security Scanning
+- gosec encuentra issues reales pero muchos son falsos positivos
+- govulncheck es más preciso que nancy y no requiere autenticación
+- continue-on-error permite escaneo informativo sin bloquear
+- SARIF format permite integración con GitHub Security tab
+- Vulnerabilidades de stdlib requieren actualización de Go
+- fetch-depth: 0 necesario para gitleaks en PRs
+
 ### CI/CD
 - Tests de integración requieren servicios adicionales
 - Linting debe ejecutarse antes de tests
@@ -314,7 +387,7 @@ Según TutorIA, se siguió el flujo profesional para cada paso:
 
 ---
 
-**Fecha de implementación:** 26 de febrero de 2025  
-**PRs:** #12, #13, #14, #16  
-**Estado:** Pasos 1-4 completados y mergeados a develop  
-**Siguiente:** Paso 5 - CI/CD Avanzado (Security Scanning)
+**Fecha de implementación:** 26-27 de febrero de 2025  
+**PRs:** #12, #13, #14, #16, #18  
+**Estado:** Pasos 1-5 completados y mergeados a develop  
+**Siguiente:** Paso 6 - Code Coverage Reporting

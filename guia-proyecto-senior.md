@@ -343,19 +343,20 @@ Presupuesto, etiquetas y revisiones de costo periodicas.
   - Tests unitarios de use cases: Create, Assign, List ✅
   - Tests de integración de repositorios con PostgreSQL ✅
   - Tests de handlers HTTP con mocks ✅
+  - Security scanning automatizado (gosec, govulncheck, gitleaks) ✅
   - Mocks compartidos refactorizados ✅
   - Correcciones de linting (9 errores resueltos) ✅
   - CI/CD con GitHub Actions funcionando ✅
-  - PRs #12, #13, #14, #16 mergeados exitosamente
-  - Progreso: Pasos 1-4 completados (51 casos de prueba, 887+ líneas de test)
-  - Pendiente: Pasos 5-10 (Security scanning, deployment, coverage reporting)
+  - PRs #12, #13, #14, #16, #18 mergeados exitosamente
+  - Progreso: Pasos 1-5 completados (51 casos de prueba, 887+ líneas de test, 3 security scanners)
+  - Pendiente: Pasos 6-10 (Code coverage, deployment automation)
 
 ### Proxima accion inmediata:
-Continuar Fase 5 - Paso 5:
-- Configurar security scanning en CI/CD
-- Implementar SAST (Static Application Security Testing)
-- Configurar dependency scanning
-- Agregar secrets detection
+Continuar Fase 5 - Paso 6:
+- Configurar code coverage reporting
+- Integrar codecov o coveralls
+- Agregar badge de coverage al README
+- Configurar umbrales mínimos de cobertura
 
 ## 13. Decisiones iniciales de stack (acordadas)
 - Backend principal: Go.
