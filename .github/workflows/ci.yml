@@ -1,10 +1,10 @@
 name: CI
 
 on:
-  pull_request:
-    branches: [develop, main]
   push:
-    branches: [develop, main]
+    branches: [ develop, main ]
+  pull_request:
+    branches: [ develop, main ]
 
 jobs:
   lint:
@@ -16,7 +16,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.22'
+          go-version: '1.21'
       
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v4
@@ -27,6 +27,7 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
+    
     services:
       postgres:
         image: postgres:15-alpine
@@ -48,7 +49,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.22'
+          go-version: '1.21'
       
       - name: Run tests
         working-directory: backend
@@ -59,12 +60,10 @@ jobs:
           DB_PASSWORD: postgres
           DB_NAME: ops_incident_hub_test
           DB_SSLMODE: disable
-        run: |
-          go test -v -race -coverprofile=coverage.out ./...
-          go tool cover -func=coverage.out
+        run: go test -v -race ./...
 
-  build:
-    name: Build
+  security:
+    name: Security Scan
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -72,17 +71,53 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.22'
+          go-version: '1.21'
+      
+      - name: Run gosec Security Scanner
+        uses: securego/gosec@master
+        with:
+          args: '-no-fail -fmt sarif -out gosec-results.sarif ./backend/...'
+      
+      - name: Upload gosec results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: gosec-results.sarif
+      
+      - name: Install nancy
+        run: go install github.com/sonatype-nexus-community/nancy@latest
+      
+      - name: Run nancy dependency scanner
+        working-directory: backend
+        run: go list -json -deps ./... | nancy sleuth
+      
+      - name: Run gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    needs: [lint, test, security]
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
       
       - name: Build
         working-directory: backend
         run: go build -v ./cmd/api
 
-  docker:
+  docker-build:
     name: Docker Build
     runs-on: ubuntu-latest
+    needs: [lint, test, security]
     steps:
       - uses: actions/checkout@v4
       
       - name: Build Docker image
-        run: docker build -t ops-incident-hub:test ./backend
+        run: docker build -t ops-incident-hub:test -f backend/Dockerfile backend/
