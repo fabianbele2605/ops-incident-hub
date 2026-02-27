@@ -337,15 +337,23 @@ Presupuesto, etiquetas y revisiones de costo periodicas.
   - Fecha de cierre: 26 de febrero de 2025
 
 ### Fase actual:
-- 🔄 Fase 5 - CI/CD profesional (SIGUIENTE)
+- 🔄 Fase 5 - CI/CD profesional (EN PROGRESO)
+  - Documentos: fase5-tests-unitarios.md
+  - Tests unitarios de domain: Incident y User entities
+  - Tests unitarios de use cases: Create, Assign, List
+  - Mocks compartidos refactorizados
+  - Correcciones de linting (9 errores resueltos)
+  - CI/CD con GitHub Actions funcionando
+  - PR #12 mergeado exitosamente
+  - Progreso: Pasos 1-2 completados (Tests unitarios)
+  - Pendiente: Pasos 3-10 (Tests de integración, handlers, security scanning, deployment)
 
 ### Proxima accion inmediata:
-Iniciar Fase 5 para implementar CI/CD:
-- Configurar GitHub Actions workflows
-- Implementar tests unitarios y de integracion
-- Configurar escaneo de seguridad automatico
-- Definir estrategia de deployment por entornos
-- Implementar versionado semantico automatico
+Continuar Fase 5 - Paso 3:
+- Implementar tests de integración de repositorios con BD real
+- Setup y teardown de base de datos de test
+- Tests de CRUD completo en PostgreSQL
+- Tests de filtros y paginación
 
 ## 13. Decisiones iniciales de stack (acordadas)
 - Backend principal: Go.
