@@ -108,7 +108,9 @@ func (r *UserRepository) List(ctx context.Context) ([]*domain.User, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to list users: %w", err)
 	}
-	defer rows.Close()
+	defer func() {
+		_ = rows.Close()
+	}()
 
 	users := []*domain.User{}
 	for rows.Next() {

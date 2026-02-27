@@ -152,7 +152,9 @@ func (r *IncidentRepository) List(ctx context.Context, filters domain.ListFilter
 	if err != nil {
 		return nil, fmt.Errorf("failed to list incidents: %w", err)
 	}
-	defer rows.Close()
+	defer func() {
+		_ = rows.Close()
+	}()
 
 	incidents := []*domain.Incident{}
 	for rows.Next() {
@@ -281,7 +283,6 @@ func (r *IncidentRepository) Count(ctx context.Context, filters domain.ListFilte
 	if filters.CreatedBy != nil {
 		query += fmt.Sprintf(" AND created_by = $%d", argPos)
 		args = append(args, *filters.CreatedBy)
-		argPos++
 	}
 
 	var count int
