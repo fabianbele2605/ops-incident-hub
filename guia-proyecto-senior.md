@@ -338,22 +338,23 @@ Presupuesto, etiquetas y revisiones de costo periodicas.
 
 ### Fase actual:
 - 🔄 Fase 5 - CI/CD profesional (EN PROGRESO)
-  - Documentos: fase5-tests-unitarios.md
-  - Tests unitarios de domain: Incident y User entities
-  - Tests unitarios de use cases: Create, Assign, List
-  - Mocks compartidos refactorizados
-  - Correcciones de linting (9 errores resueltos)
-  - CI/CD con GitHub Actions funcionando
-  - PR #12 mergeado exitosamente
-  - Progreso: Pasos 1-2 completados (Tests unitarios)
-  - Pendiente: Pasos 3-10 (Tests de integración, handlers, security scanning, deployment)
+  - Documentos: fase5-tests-unitarios.md, fase5-tests-completos.md
+  - Tests unitarios de domain: Incident y User entities ✅
+  - Tests unitarios de use cases: Create, Assign, List ✅
+  - Tests de integración de repositorios con PostgreSQL ✅
+  - Mocks compartidos refactorizados ✅
+  - Correcciones de linting (9 errores resueltos) ✅
+  - CI/CD con GitHub Actions funcionando ✅
+  - PRs #12, #13, #14 mergeados exitosamente
+  - Progreso: Pasos 1-3 completados (43 casos de prueba, 575+ líneas de test)
+  - Pendiente: Pasos 4-10 (Tests de handlers HTTP, security scanning, deployment)
 
 ### Proxima accion inmediata:
-Continuar Fase 5 - Paso 3:
-- Implementar tests de integración de repositorios con BD real
-- Setup y teardown de base de datos de test
-- Tests de CRUD completo en PostgreSQL
-- Tests de filtros y paginación
+Continuar Fase 5 - Paso 4:
+- Implementar tests de handlers HTTP
+- Tests de endpoints REST (Create, Assign, List)
+- Validación de request/response JSON
+- Manejo de errores HTTP y status codes
 
 ## 13. Decisiones iniciales de stack (acordadas)
 - Backend principal: Go.
