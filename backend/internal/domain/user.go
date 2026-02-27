@@ -10,18 +10,18 @@ import (
 type Role string
 
 const (
-	RoleAdmin       Role = "admin"
-	RoleOperator    Role = "operator"
-	RoleViewer      Role = "viewer"
+	RoleAdmin    Role = "admin"
+	RoleOperator Role = "operator"
+	RoleViewer   Role = "viewer"
 )
 
 // User representa un usuario del sistema
 type User struct {
-	ID              uuid.UUID
-	Email           string
-	Name            string
-	Role            Role
-	CreatedAt       time.Time
+	ID        uuid.UUID
+	Email     string
+	Name      string
+	Role      Role
+	CreatedAt time.Time
 }
 
 // NewUser crea un nuevo usuario
@@ -37,11 +37,11 @@ func NewUser(email, name string, role Role) (*User, error) {
 	}
 
 	return &User{
-		ID:             uuid.New(),
-		Email:          email,
-		Name:           name,
-		Role:           role,
-		CreatedAt:      time.Now(),
+		ID:        uuid.New(),
+		Email:     email,
+		Name:      name,
+		Role:      role,
+		CreatedAt: time.Now(),
 	}, nil
 }
 

@@ -9,21 +9,21 @@ import (
 
 // AssignIncidentInput representa los datos de entrada
 type AssignIncidentInput struct {
-	IncidentID    uuid.UUID
-	AssignedTo    uuid.UUID
-	AssignedBy    uuid.UUID
+	IncidentID uuid.UUID
+	AssignedTo uuid.UUID
+	AssignedBy uuid.UUID
 }
 
 // AssignIncidentUseCase maneja la asignacion de incidentes
 type AssignIncidentUseCase struct {
-	incidentRepo   domain.IncidentRepository
-	userRepo       domain.UserRepository
+	incidentRepo domain.IncidentRepository
+	userRepo     domain.UserRepository
 }
 
 // NewAssignIncidentUseCase crea una nueva instancia
 func NewAssignIncidentUseCase(
-	incidentRepo  domain.IncidentRepository,
-	userRepo      domain.UserRepository,
+	incidentRepo domain.IncidentRepository,
+	userRepo domain.UserRepository,
 ) *AssignIncidentUseCase {
 	return &AssignIncidentUseCase{
 		incidentRepo: incidentRepo,

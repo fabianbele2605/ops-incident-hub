@@ -12,7 +12,7 @@ import (
 func TestNewUser(t *testing.T) {
 	t.Run("successful creation", func(t *testing.T) {
 		user, err := domain.NewUser("test@example.com", "Test User", domain.RoleAdmin)
-		
+
 		require.NoError(t, err)
 		assert.NotNil(t, user)
 		assert.NotEqual(t, uuid.Nil, user.ID)
@@ -24,7 +24,7 @@ func TestNewUser(t *testing.T) {
 
 	t.Run("empty email", func(t *testing.T) {
 		user, err := domain.NewUser("", "Test User", domain.RoleAdmin)
-		
+
 		assert.Error(t, err)
 		assert.Nil(t, user)
 		assert.Equal(t, domain.ErrInvalidEmail, err)
@@ -32,7 +32,7 @@ func TestNewUser(t *testing.T) {
 
 	t.Run("empty name", func(t *testing.T) {
 		user, err := domain.NewUser("test@example.com", "", domain.RoleAdmin)
-		
+
 		assert.Error(t, err)
 		assert.Nil(t, user)
 		assert.Equal(t, domain.ErrInvalidName, err)
@@ -40,7 +40,7 @@ func TestNewUser(t *testing.T) {
 
 	t.Run("invalid role", func(t *testing.T) {
 		user, err := domain.NewUser("test@example.com", "Test User", "invalid")
-		
+
 		assert.Error(t, err)
 		assert.Nil(t, user)
 		assert.Equal(t, domain.ErrInvalidRole, err)
@@ -50,19 +50,19 @@ func TestNewUser(t *testing.T) {
 func TestUser_CanManageIncidents(t *testing.T) {
 	t.Run("admin can manage", func(t *testing.T) {
 		user, _ := domain.NewUser("admin@example.com", "Admin", domain.RoleAdmin)
-		
+
 		assert.True(t, user.CanManageIncidents())
 	})
 
 	t.Run("operator can manage", func(t *testing.T) {
 		user, _ := domain.NewUser("operator@example.com", "Operator", domain.RoleOperator)
-		
+
 		assert.True(t, user.CanManageIncidents())
 	})
 
 	t.Run("viewer cannot manage", func(t *testing.T) {
 		user, _ := domain.NewUser("viewer@example.com", "Viewer", domain.RoleViewer)
-		
+
 		assert.False(t, user.CanManageIncidents())
 	})
 }

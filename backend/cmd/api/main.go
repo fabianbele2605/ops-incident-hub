@@ -66,7 +66,6 @@ func main() {
 	// Inicializar handlers
 	healthHandler := handler.NewHealthHandler(db)
 
-
 	// Inicializar handlers
 	incidentHandler := handler.NewIncidentHandler(
 		createIncidentUC,
@@ -121,7 +120,6 @@ func main() {
 		log.Println("Server stopped gracefully")
 	}
 }
-
 
 func runHealthCheck() {
 	cfg, err := config.Load()

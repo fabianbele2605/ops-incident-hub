@@ -18,13 +18,13 @@ type ListIncidentsInput struct {
 
 // ListIncidentsOutput representa el resultado
 type ListIncidentsOutput struct {
-	Incidents  []*domain.Incident
-	Total      int
+	Incidents []*domain.Incident
+	Total     int
 }
 
 // ListIncidentsUseCase maneja el listado de incidentes
 type ListIncidentsUseCase struct {
-	incidentRepo    domain.IncidentRepository
+	incidentRepo domain.IncidentRepository
 }
 
 // NewListIncidentUseCase crea una nueva instancia
@@ -46,13 +46,13 @@ func (uc *ListIncidentsUseCase) Execute(ctx context.Context, input ListIncidents
 
 	// Crear filtros
 	filters := domain.ListFilters{
-		Status:       input.Status,
-		Severity:     input.Severity,
-		AssignedTo:   input.AssignedTo,
-		Limit:        input.Limit,
-		Offset:       input.Offset,
-		SortBy:       "created_at",
-		SortOrder:    "desc",
+		Status:     input.Status,
+		Severity:   input.Severity,
+		AssignedTo: input.AssignedTo,
+		Limit:      input.Limit,
+		Offset:     input.Offset,
+		SortBy:     "created_at",
+		SortOrder:  "desc",
 	}
 
 	// Obtener incidentes

@@ -9,16 +9,16 @@ import (
 
 // CreateIncidentInput representa los datos de entrada para crear un incidente
 type CreateIncidentInput struct {
-	Title             string
-	Description       string
-	Severity          domain.Severity
-	CreatedBy         uuid.UUID
+	Title       string
+	Description string
+	Severity    domain.Severity
+	CreatedBy   uuid.UUID
 }
 
 // CreateIncidentUseCase maneja la creacion de incidentes
 type CreateIncidentUseCase struct {
-	incidentRepo    domain.IncidentRepository
-	userRepo        domain.UserRepository
+	incidentRepo domain.IncidentRepository
+	userRepo     domain.UserRepository
 }
 
 // NewCreateIncidentUseCase crea una nueva instancia del caso de uso
@@ -28,7 +28,7 @@ func NewCreateIncidentUseCase(
 ) *CreateIncidentUseCase {
 	return &CreateIncidentUseCase{
 		incidentRepo: incidentRepo,
-		userRepo: userRepo,
+		userRepo:     userRepo,
 	}
 }
 

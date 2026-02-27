@@ -22,7 +22,7 @@ type IncidentHandler struct {
 func NewIncidentHandler(
 	createUseCase *incident.CreateIncidentUseCase,
 	assignUseCase *incident.AssignIncidentUseCase,
-	listUseCase   *incident.ListIncidentsUseCase,
+	listUseCase *incident.ListIncidentsUseCase,
 ) *IncidentHandler {
 	return &IncidentHandler{
 		createUseCase: createUseCase,
