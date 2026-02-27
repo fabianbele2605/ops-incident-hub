@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 
@@ -11,18 +12,33 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// CreateIncidentExecutor interfaz para el caso de uso de creación
+type CreateIncidentExecutor interface {
+	Execute(ctx context.Context, input incident.CreateIncidentInput) (*domain.Incident, error)
+}
+
+// AssignIncidentExecutor interfaz para el caso de uso de asignación
+type AssignIncidentExecutor interface {
+	Execute(ctx context.Context, input incident.AssignIncidentInput) error
+}
+
+// ListIncidentsExecutor interfaz para el caso de uso de listado
+type ListIncidentsExecutor interface {
+	Execute(ctx context.Context, input incident.ListIncidentsInput) (*incident.ListIncidentsOutput, error)
+}
+
 // IncidentHandler maneja las peticiones HTTP de incidentes
 type IncidentHandler struct {
-	createUseCase *incident.CreateIncidentUseCase
-	assignUseCase *incident.AssignIncidentUseCase
-	listUseCase   *incident.ListIncidentsUseCase
+	createUseCase CreateIncidentExecutor
+	assignUseCase AssignIncidentExecutor
+	listUseCase   ListIncidentsExecutor
 }
 
 // NewIncidentHandler crea una nueva instancia
 func NewIncidentHandler(
-	createUseCase *incident.CreateIncidentUseCase,
-	assignUseCase *incident.AssignIncidentUseCase,
-	listUseCase *incident.ListIncidentsUseCase,
+	createUseCase CreateIncidentExecutor,
+	assignUseCase AssignIncidentExecutor,
+	listUseCase ListIncidentsExecutor,
 ) *IncidentHandler {
 	return &IncidentHandler{
 		createUseCase: createUseCase,
