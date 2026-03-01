@@ -27,7 +27,7 @@ func TestCircuitBreaker_OpenAfterFailures(t *testing.T) {
 	
 	// Generar 3 fallos
 	for i := 0; i < 3; i++ {
-		cb.Execute(func() error {
+		_ = cb.Execute(func() error {
 			return errors.New("error")
 		})
 	}
@@ -50,8 +50,8 @@ func TestCircuitBreaker_HalfOpenAfterTimeout(t *testing.T) {
 	cb := NewCircuitBreaker(2, 100*time.Millisecond)
 	
 	// Generar fallos para abrir circuito
-	cb.Execute(func() error { return errors.New("error") })
-	cb.Execute(func() error { return errors.New("error") })
+	_ = cb.Execute(func() error { return errors.New("error") })
+	_ = cb.Execute(func() error { return errors.New("error") })
 	
 	if cb.State() != StateOpen {
 		t.Errorf("expected state Open, got %v", cb.State())
