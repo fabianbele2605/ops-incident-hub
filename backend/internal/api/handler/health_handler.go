@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"context"
 	"database/sql"
 	"encoding/json"
 	"net/http"
@@ -15,54 +16,60 @@ func NewHealthHandler(db *sql.DB) *HealthHandler {
 	return &HealthHandler{db: db}
 }
 
+// HealthResponse respuesta de health check
 type HealthResponse struct {
-	Status    string            `json:"status"`
-	Timestamp string            `json:"timestamp"`
-	Checks    map[string]string `json:"checks"`
+	Status       string            `json:"status"`
+	Version      string            `json:"version"`
+	Dependencies map[string]string `json:"dependencies"`
+	Timestamp    time.Time         `json:"timestamp"`
 }
 
-// Health - Endpoint completo de salud con verificación de dependencias
+// Health endpoint básico con verificación de dependencias
 func (h *HealthHandler) Health(w http.ResponseWriter, r *http.Request) {
-	checks := make(map[string]string)
-	status := "healthy"
-
-	// Verificar base de datos
-	ctx := r.Context()
-	if err := h.db.PingContext(ctx); err != nil {
-		checks["database"] = "unhealthy"
-		status = "unhealthy"
-	} else {
-		checks["database"] = "healthy"
-	}
-
 	response := HealthResponse{
-		Status:    status,
-		Timestamp: time.Now().UTC().Format(time.RFC3339),
-		Checks:    checks,
+		Status:       "healthy",
+		Version:      "1.0.0",
+		Dependencies: make(map[string]string),
+		Timestamp:    time.Now(),
 	}
-
-	w.Header().Set("Content-Type", "application/json")
-	if status == "unhealthy" {
-		w.WriteHeader(http.StatusServiceUnavailable)
-	} else {
-		w.WriteHeader(http.StatusOK)
-	}
-	if err := json.NewEncoder(w).Encode(response); err != nil {
-		http.Error(w, "Failed to encode response", http.StatusInternalServerError)
-	}
-}
-
-// Ready - Readiness probe (verifica que está listo para recibir tráfico)
-func (h *HealthHandler) Ready(w http.ResponseWriter, r *http.Request) {
-	ctx := r.Context()
+	
+	// Verificar base de datos
+	ctx, cancel := context.WithTimeout(r.Context(), 2*time.Second)
+	defer cancel()
+	
 	if err := h.db.PingContext(ctx); err != nil {
+		response.Status = "unhealthy"
+		response.Dependencies["database"] = "down"
+		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusServiceUnavailable)
+		_ = json.NewEncoder(w).Encode(response)
 		return
 	}
+	
+	response.Dependencies["database"] = "up"
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
+	_ = json.NewEncoder(w).Encode(response)
 }
 
-// Live - Liveness probe (verifica que la aplicación está viva)
+// Live liveness probe (proceso vivo)
 func (h *HealthHandler) Live(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write([]byte("OK"))
+}
+
+// Ready readiness probe (listo para recibir tráfico)
+func (h *HealthHandler) Ready(w http.ResponseWriter, r *http.Request) {
+	// Verificar que todas las dependencias estén listas
+	ctx, cancel := context.WithTimeout(r.Context(), 2*time.Second)
+	defer cancel()
+	
+	if err := h.db.PingContext(ctx); err != nil {
+		w.WriteHeader(http.StatusServiceUnavailable)
+		_, _ = w.Write([]byte("Database not ready"))
+		return
+	}
+	
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write([]byte("Ready"))
 }
