@@ -14,6 +14,7 @@ type DatabaseConfig struct {
 	MaxOpenConns    int
 	MaxIdleConns    int
 	ConnMaxLifetime time.Duration
+	ConnMaxIdleTime time.Duration
 }
 
 // NewDatabase crea una nueva conexión a PostgreSQL
@@ -23,9 +24,11 @@ func NewDatabase(config DatabaseConfig) (*sql.DB, error) {
 		return nil, fmt.Errorf("failed to open database: %w", err)
 	}
 
-	db.SetMaxOpenConns(config.MaxOpenConns)
-	db.SetMaxIdleConns(config.MaxIdleConns)
-	db.SetConnMaxLifetime(config.ConnMaxLifetime)
+	// Configurar connection pool
+	db.SetMaxOpenConns(config.MaxOpenConns)       // Máximo de conexiones abiertas
+	db.SetMaxIdleConns(config.MaxIdleConns)       // Máximo de conexiones idle
+	db.SetConnMaxLifetime(config.ConnMaxLifetime) // Tiempo de vida máximo
+	db.SetConnMaxIdleTime(config.ConnMaxIdleTime) // Tiempo idle máximo
 
 	if err := db.Ping(); err != nil {
 		return nil, fmt.Errorf("failed to ping database: %w", err)
