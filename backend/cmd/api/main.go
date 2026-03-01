@@ -45,6 +45,7 @@ func main() {
 		MaxOpenConns:    cfg.Database.MaxOpenConns,
 		MaxIdleConns:    cfg.Database.MaxIdleConns,
 		ConnMaxLifetime: cfg.Database.ConnMaxLifetime,
+		ConnMaxIdleTime: cfg.Database.ConnMaxIdleTime,
 	})
 	if err != nil {
 		appLogger.Error("failed to connect to database", "error", err)
