@@ -4,19 +4,25 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"time"
 
 	"github.com/fabianbele2605/ops-incident-hub/backend/internal/domain"
+	"github.com/fabianbele2605/ops-incident-hub/backend/internal/resilience"
 	"github.com/google/uuid"
 )
 
 // UserRepository implementación PostgreSQL del repositorio de usuarios
 type UserRepository struct {
-	db *sql.DB
+	db             *sql.DB
+	circuitBreaker *resilience.CircuitBreaker
 }
 
 // NewUserRepository crea una nueva instancia
 func NewUserRepository(db *sql.DB) *UserRepository {
-	return &UserRepository{db: db}
+	return &UserRepository{
+		db:             db,
+		circuitBreaker: resilience.NewCircuitBreaker(5, 30*time.Second),
+	}
 }
 
 // Create crea un nuevo usuario
@@ -44,28 +50,36 @@ func (r *UserRepository) Create(ctx context.Context, user *domain.User) error {
 
 // GetByID obtiene un usuario por su ID
 func (r *UserRepository) GetByID(ctx context.Context, id uuid.UUID) (*domain.User, error) {
-	query := `
-		SELECT id, email, name, role, created_at
-		FROM users
-		WHERE id = $1
-	`
+	var user *domain.User
+	err := r.circuitBreaker.Execute(func() error {
+		query := `
+			SELECT id, email, name, role, created_at
+			FROM users
+			WHERE id = $1
+		`
 
-	user := &domain.User{}
-	err := r.db.QueryRowContext(ctx, query, id).Scan(
-		&user.ID,
-		&user.Email,
-		&user.Name,
-		&user.Role,
-		&user.CreatedAt,
-	)
+		user = &domain.User{}
+		err := r.db.QueryRowContext(ctx, query, id).Scan(
+			&user.ID,
+			&user.Email,
+			&user.Name,
+			&user.Role,
+			&user.CreatedAt,
+		)
 
-	if err == sql.ErrNoRows {
-		return nil, domain.ErrUserNotFound
-	}
+		if err == sql.ErrNoRows {
+			return domain.ErrUserNotFound
+		}
+		if err != nil {
+			return fmt.Errorf("failed to get user: %w", err)
+		}
+
+		return nil
+	})
+
 	if err != nil {
-		return nil, fmt.Errorf("failed to get user: %w", err)
+		return nil, err
 	}
-
 	return user, nil
 }
 
