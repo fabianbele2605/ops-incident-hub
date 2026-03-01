@@ -12,12 +12,13 @@ import (
 )
 
 // SetupRouter configura las rutas de la API
-func SetupRouter(incidentHandler *handler.IncidentHandler, healthHandler *handler.HealthHandler, appLogger *slog.Logger, allowedOrigins []string) *mux.Router {
+func SetupRouter(incidentHandler *handler.IncidentHandler, healthHandler *handler.HealthHandler, appLogger *slog.Logger, allowedOrigins []string, rateLimiter *middleware.RateLimiter) *mux.Router {
 	router := mux.NewRouter()
 
 	// Middleware global (orden importa)
 	router.Use(middleware.SecurityHeadersMiddleware)
 	router.Use(middleware.CORSMiddleware(allowedOrigins))
+	router.Use(rateLimiter.RateLimitMiddleware)
 	router.Use(metrics.MetricsMiddleware)
 	router.Use(logger.LoggingMiddleware(appLogger))
 
