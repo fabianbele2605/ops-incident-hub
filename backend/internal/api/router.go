@@ -25,7 +25,7 @@ func SetupRouter(incidentHandler *handler.IncidentHandler, healthHandler *handle
 	// Metrics endpoint
 	router.Handle("/metrics", promhttp.Handler()).Methods("GET")
 
-	// Health endpoints (antes de /api/v1)
+	// Health endpoints
 	router.HandleFunc("/health", healthHandler.Health).Methods("GET")
 	router.HandleFunc("/health/ready", healthHandler.Ready).Methods("GET")
 	router.HandleFunc("/health/live", healthHandler.Live).Methods("GET")
