@@ -11,10 +11,11 @@ import (
 
 	"github.com/fabianbele2605/ops-incident-hub/backend/internal/api"
 	"github.com/fabianbele2605/ops-incident-hub/backend/internal/api/handler"
+	"github.com/fabianbele2605/ops-incident-hub/backend/internal/api/middleware"
 	"github.com/fabianbele2605/ops-incident-hub/backend/internal/config"
 	"github.com/fabianbele2605/ops-incident-hub/backend/internal/infrastructure/postgres"
-	"github.com/fabianbele2605/ops-incident-hub/backend/internal/usecase/incident"
 	"github.com/fabianbele2605/ops-incident-hub/backend/internal/observability/logger"
+	"github.com/fabianbele2605/ops-incident-hub/backend/internal/usecase/incident"
 )
 
 func main() {
@@ -84,8 +85,11 @@ func main() {
 		listIncidentsUC,
 	)
 
+	// Inicializar rate limiter
+	rateLimiter := middleware.NewRateLimiter(10, 20) // 10 req/s, burst 20
+
 	// Configurar router
-	router := api.SetupRouter(incidentHandler, healthHandler, appLogger, cfg.Server.AllowedOrigins)
+	router := api.SetupRouter(incidentHandler, healthHandler, appLogger, cfg.Server.AllowedOrigins, rateLimiter)
 
 	// Configurar servidor HTTP
 	server := &http.Server{
